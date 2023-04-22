@@ -1,0 +1,15 @@
+# Here we'll store the necessary configuration parameters for the 
+# source code of the tourism section of our implementation
+
+# Name of experiment
+exp_name: 'exp01_tourism'
+
+
+# i) Number of out of bounds travellers (2022-2023)
+numOfOutboundTravellers: /Users/dimitriosfotinos/Downloads/BOG/data/tourism/numberOfOutboundTravellers
+
+# ii) Internal income (2022-2023)
+internalIncome: /Users/dimitriosfotinos/Downloads/BOG/data/tourism/numberOfOutboundTravellers
+
+# Output directory
+output: /Users/dimitriosfotinos/Downloads/BOG/output

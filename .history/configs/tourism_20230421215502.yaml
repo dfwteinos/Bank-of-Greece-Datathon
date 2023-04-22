@@ -1,0 +1,6 @@
+# Here we'll store the necessary configuration parameters for the 
+# source code of the tourism section of our implementation
+
+exp_name: 'exp01_tourism'
+
+numOfOutboundTravellers22: data/tourism/2022

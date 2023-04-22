@@ -1,0 +1,4 @@
+# Here we'll store the necessary configuration parameters for the 
+# source code of the tourism section of our implementation
+
+numOfOutboundTravellers22: data/tourism/2022
