@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Greece Map with Pie Chart</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <style>
+        #map { height: 100%; width: 100%; }
+    </style>
+</head>
+<body>
+    <div id="map"></div>
+    <script>
+        const map = L.map('map').setView([38.2462420, 24.0255770], 7);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
+
+        fetch('/geojson')
+            .then(response => response.json())
+            .then(data => {
+                L.geoJSON(data, {
+                    onEachFeature: (feature, layer) => {
+                        layer.bindPopup(
+                            `<a href="#" onclick="openPieChart('${feature.properties.PER}')">${feature.properties.PER} - Click to see Pie Chart</a>`
+                        );
+                    }
+                }).addTo(map);
+            });
+
+        function openPieChart(region) {
+            const pieData = [{
+                values: [25, 45, 30],
+                labels: ['A', 'B', 'C'],
+                type: 'pie'
+            }];
+
+            const layout = {
+                title: `${region} - Pie Chart`
+            };
+
+            Plotly.newPlot('map', pieData, layout);
+        }
+    </script>
+</body>
+</html>
