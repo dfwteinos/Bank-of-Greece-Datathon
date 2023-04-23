@@ -70,19 +70,19 @@ districts = ['Eastern Macedonia and Thrace',
 
 tourism_income_data = {
                       'Year': [2016, 2017, 2018,2021],
-                      'Attica': [1734,2083,2279,1466],
-                      'Southern Aegean' : [1989+1147,2236+1417,2814+1600,1946+1175],
-                      'Crete': [3095,3260,3134,2395],
-                      'Central Macedonia': [1688,1852,2275,1012],
-                      'Ionian Islands': [1504,1775,1691,1297],
                       'Eastern Macedonia and Thrace': [288,282,322,134],
-                      'Peloponnesus': [324,307,415,250],
+                      'Central Macedonia': [1688,1852,2275,1012],
+                      'Western Macedonia': [68,45,61,38],
                       'Epirus': [218,216,222,127],
                       'Thessaly': [301,290,270,179],
-                      'Western Greece': [146,159,212,128],
+                      'Northern Aegean': [131,167,164,68],
+                      'Southern Aegean' : [1989+1147,2236+1417,2814+1600,1946+1175],
                       'Central Greece': [117,113,194,113],
-                      'Western Macedonia': [68,45,61,38],
-                      'Northern Aegean': [131,167,164,68]
+                      'Western Greece': [146,159,212,128],
+                      'Peloponnesus': [324,307,415,250],
+                      'Ionian Islands': [1504,1775,1691,1297],
+                      'Crete': [3095,3260,3134,2395],
+                      'Attica': [1734,2083,2279,1466],
                     }
 
 tourism_income_df = pd.DataFrame(tourism_income_data)
@@ -136,8 +136,7 @@ col2, col3 = st.columns((2,1))
 col1.header('Input Options')
 
 ## Read Year Input
-year_input = "2024"
-requested_year = st.sidebar.text_area("Year:", year_input) 
+requested_year = col1.slider('Year:', 2023, 2033, 2023) 
 
 ## Sidebar - Number of coins to display
 quarter = col1.slider('Quarter:', 1, 4, 2)
@@ -162,13 +161,11 @@ quarter_total_loans = get_quarter_avg_loans(quarter_range, predictor)
 tourism_income_df_means = tourism_income_df.mean()
 # calculate weights for each area based on their income
 area_weights = tourism_income_df_means / tourism_income_df_means.sum()
+area_weights = area_weights[1:]
 
 dfper = pd.read_csv("WGS84.csv")
 dfper['the_geom'] = dfper['the_geom'].apply(loads)
-
-n = 13  # size of the list
-random_list = random.sample(range(100), n)
-dfper['value'] = random_list
+dfper['value'] = area_weights.values
 
 # Convert the DataFrame to a GeoDataFrame
 gdf = gpd.GeoDataFrame(dfper, geometry='the_geom')
@@ -207,11 +204,31 @@ folium.GeoJson(
 ).add_to(m)
 
 # Add the colormap to the map
-cmap.caption = "Value"
+cmap.caption = "Tourism Revenue"
 cmap.add_to(m)
 
 # Display the map
 folium_static(m, width=700)
+
+
+data = {'Action': ['Hotels', 'Restaurants', 'Arts and culture', 'Outdoors', 'Night', 'Cruises', 'Luxury Services', 'Outdoor'],
+        'Frequency': [32, 17, 10, 10, 10, 10, 10, 1]}
+
+df = pd.DataFrame(data)
+
+import plotly.express as px
+import plotly.graph_objects as go
+
+# Assuming you have already created your DataFrame and named it df
+
+# Sort the DataFrame by 'Frequency' in descending order
+df = df.sort_values('Frequency', ascending=False)
+
+# Create the pie chart using Plotly Express
+fig = px.pie(df, names='Action', values='Frequency', title='NLP Score of Actions')
+
+# Show the plot
+st.plotly_chart(fig)
 
 
 
