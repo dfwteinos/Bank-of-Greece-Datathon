@@ -163,6 +163,8 @@ tourism_income_df_means = tourism_income_df.mean()
 # calculate weights for each area based on their income
 area_weights = tourism_income_df_means / tourism_income_df_means.sum()
 
+st.print(area_weights)
+
 dfper = pd.read_csv("WGS84.csv")
 dfper['the_geom'] = dfper['the_geom'].apply(loads)
 
